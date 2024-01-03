@@ -134,3 +134,26 @@
 
 
 # データ統合
+## Data Lake
+- 複数のソースからリアルタイムデータを直接取り込むことができる
+- Geo 冗長は手動で構成する必要がある
+
+## Databricks
+- ビッグデータ処理と機械学習を単一のプラットフォームで行うことができる
+- Apache Spark に基づいている
+
+## Synapse Analytics
+- サーバーレスデータや大規模データに対してクエリを実行できる
+- 超並列処理(MPP)アーキテクチャ
+
+### コンポーネント
+- Synapse SQL プール
+- Synapse Spark プール: Apache Spark を実行してデータを処理するサーバーのクラスター
+- Synapse パイプライン: データの移動と変換. **Data Factory の機能が適用される**
+- Synapse Link: Cosmos DB に接続できる
+- Synapse Studio: Web ベース IDE
+
+## Stream Analytics
+- リアルタイム分析を行うイベント処理エンジン
+- CSV, JSON, Avro のイベント処理がサポートされる
+- Event Hub や IoT Hub, BLOB Storage からデータを取り込む
