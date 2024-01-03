@@ -126,4 +126,53 @@
 
 
 # 移行を設計する
-## 
+## Migrate
+- TCO 計算ツール: 移行前にコストを見積もる
+
+### Web アプリの移行
+- App Service Migration Assistant を使用
+  - Windows ASP.NET Web アプリの評価と App Service への移行が可能
+
+### 仮想マシンの移行
+- **Server Migration** を使用
+
+### データベース内の構造化データの移行
+- **Database Migration Service** を使用
+  - オンプレミスのデータベースを SQL Database, SQL Managed Instance または VM 上の SQL Server に移行
+- データ移行の方法:
+  - **オンライン移行**
+    - ダウンタイムを最小限に抑えられる
+  - **オフライン移行**
+    - サーバのシャットダウンが必要, ダウンタイムが発生する
+
+#### SQL Server Data Migration Assistant(DMA)
+- データベースの評価, スキーマの移行, データの移行と検証が実行される
+
+#### 移行手順
+1. オンプレミスデータベースを DMA で評価する
+2. DMA でスキーマを移行する
+  - 移行先データベースに空の構造が作成される
+  - データ移行前に接続が検証される
+3. Data Migration Service でデータを移行し, 検証する
+
+### 非構造化データの移行
+#### Storage Migration Service
+- サーバーを新しいハードウェアまたは仮想マシンに移行するさいに使用する
+
+#### File Sync
+- 組織のファイル共有を一元化
+- バックアップ用またはディザスターリカバリー用のストレージとして使用できる
+
+### オフラインデータの移行
+- データが多くないときには AzCopy や Azure Storage Explorer を使用する
+
+#### Import/Export
+- Import は BLOB と Files でサポートされる
+- Export は BLOB のみ
+- BitLocker を有効化する必要がある
+
+#### Data Box
+- 専用デバイスを受け取って, オンプレミス環境でデータの送受信を行う
+  - Import/Export では自己所有ディスクを使うのに対し, Data Box では専用デバイスを注文して使用する
+- **Microsoft が出荷と物流を処理する**
+- 40 TB を超えるデータの転送に適する
