@@ -60,49 +60,97 @@
 - DTU は事前構成済み
 - サーバーレスは従量課金
 
+### 可用性
+- ローカル冗長可用性は**全てのサービスレベルでサポートされる**
+- ゾーン冗長可用性は**Basic(DTU), Standard(DTU) ではサポート外**
+- [Azure SQL Database の高可用性](https://learn.microsoft.com/ja-jp/azure/azure-sql/database/high-availability-sla?view=azuresql&tabs=azure-powershell#zone-redundant-availability)
+
+#### ローカル冗長
+##### Basic / Standard / General Purpose
+- **リモート記憶域可用性モデル**
+- プライマリレプリカでは, ローカル VM のSSD が一時データベースとして用いられる
+- データファイルとログファイルは Premium ブロック BLOB(LRS 冗長) で保存される
+- バックアップファイルは Standard 汎用 v2(RA-GRS) に保存される(**グローバル冗長**)
+  - *これがリモート記憶域可用性モデルと言われる理由[要出典]*
+- プライマリで障害発生時には, 新しい SQL Server インスタンスが起動する(**フェールオーバー**)
+
+##### Premium / Businnes Critical
+- **ローカルストレージ可用性モデル**, つまりコンピューティングリソースとストレージ (SSD) が 1 つのノードに統合される
+- データファイルとログファイルはローカル SSD に配置される
+- 高可用性は **Always On 可用性グループ**と同じようにして実装される
+  - クラスターにはプライマリレプリカと, 最大 3 つのセカンダリレプリカが含まれる
+  - プライマリで障害発生時には, グループ内のレプリカにフェールオーバーする
+    - このとき, データの損失はない(フェールオーバー先となる完全に同期されたノードが常に存在するため)
+- このアーキテクチャにより**読み取りスケールアウト**がサポートされる
+  - 読み取り専用の SQL 接続をセカンダリレプリカの 1 つにリダイレクトする機能
+
+##### Hyperscale
+- [Hyperscale でのデータベースの高可用性](https://learn.microsoft.com/ja-jp/azure/azure-sql/database/service-tier-hyperscale?view=azuresql#database-high-availability-in-hyperscale)
+
+#### ゾーン冗長
+##### Basic / Standard
+- (サポート無し)
+
+##### General Purpose
+- データファイルとログファイルは Premium ブロック BLOB(ZRS 冗長) で保存される
+- ステートレス計算レイヤーが 3 つの Availability Zone で稼働しており, フェールオーバー時にすぐに使用できる
+
+##### Business Critical / Premium
+- Always On 可用性グループと制御リング(ゲートウェイ)がゾーンをまたがって構成され, Traffic Manager によって制御される
+- **追加のデータベース冗長を構成しないため, 追加料金なしで使用できる**
+
+##### Hyperscale
+- [ゾーン冗長 Hyperscale データベースを作成する](https://learn.microsoft.com/ja-jp/azure/azure-sql/database/hyperscale-create-zone-redundant-database?view=azuresql&tabs=azure-powershell)
+
 ## SQL Managed Instance
 - 共通言語ランタイム(CLR), SQL Server エージェントなどをサポート
   - SQL Server エージェント: ジョブをスケーリングできる
 - アプリケーションの再設計無しでリフトアンドシフト移行が可能
-- 仮想コアモードを使用, 最大 CPU コアと最大ストレージを定義できる
+- 仮想コアモードを使用, 最大 CPU コアと最大ストレージを定義できる(**動的スケーリング**)
+- General Purpose と Businnes Critical が提供される
+
+### 可用性
+- ローカル冗長可用性はサポートされている(アーキテクチャは SQL Database と同じ)
+- **ゾーン冗長は General Purpose のパブリックプレビュー段階で, Business Critical で使用できる**
+- [Azure SQL Managed Instance の高可用性](https://learn.microsoft.com/ja-jp/azure/azure-sql/managed-instance/high-availability-sla?view=azuresql)
+
+## フェールオーバー
+- **Service Fabric** によって自動実行される
+  - SQL Managed Instance では手動実行もサポートされる(SQL Database では手動実行は不可能)
+- Business Critical と Premium では, フェールオーバー先となる完全に同期されたノードが常に存在するため, **レプリカ間でデータ損失なしにフェールオーバーできる**
+  - *おそらく Hyperscale も損失なくフェールオーバー可能[要検証]*
 
 ## スケーラビリティ
-- SQL Database で**動的スケーラビリティ**がサポートされている
+- SQL Database と SQL Managed Instance の両方で動的スケーラビリティがサポートされている
 
 ### スケールアップ(垂直)
-- コンピューティングサイズを変更
-- エラスティックデータベースプールで実装する
+- コンピューティングサイズを動的に変更すること
+- SQL Database では**エラスティックプール**を使用することでプール内のデータベースのグループごとの最大リソース制限を設定できる
+- [最小限のダウンタイムでデータベース リソースを動的に拡張 - Azure SQL データベース と Azure SQL Managed Instance](https://learn.microsoft.com/ja-jp/azure/azure-sql/database/scale-resources?view=azuresql)
 
 ### スケールアウト(水平)
-- データベースを追加または削除して, 容量や全体のパフォーマンスを調整する
+- データベースを追加または削除して, 容量や全体のパフォーマンスを調整すること
 - **Elastic Database クライアントライブラリ**で管理する
 - スケールアウトの方法
+  - シャーディング - データを分割し複数のデータベースに分散して保管する
+  - 読み取りスケールアウト -  読み取り専用ワークロードをオフロードすることで負荷分散する
 
-#### シャーディング
-- データを分割し複数のデータベースに分散して保管する
+#### 読み取りスケールアウト
+##### SQL Database
+- Basic, Standard, General Purpose では使用できない
+- Premium, Bussiness Critical では既定で有効化される
+- Hyperscale では既定で有効化されるが, セカンダリレプリカが作成されていない場合は自動的に無効になる
 
-####  読み取りスケールアウト
-- 読み取り専用ワークロードをオフロードすることで負荷分散する
-- SQL Managed Instance では, Bussiness Critical で自動プロビジョニングされる
-- SQL Database では, Bussiness Critical と Premium で自動プロビジョニングされる
-  - Hyperscale では, セカンダリレプリカが作成されていれば読み取りスケールアウトを使用できる
+##### SQL Managed Instance
+- General Purpose では使用できない
+- **Bussiness Critical では自動的に有効になる**
 
-## 可用性
-### General Purpose / Standard
-- プライマルレプリカでは, ローカル VM のSSD が一時データベースとして用いられる
-- データファイルとログファイルは Premium ブロック BLOB(LRS 冗長) で保存される
-- バックアップファイルは Standard 汎用 v2(RA-GRS) に保存される
-  - つまりグローバル冗長
-- プライマリで障害発生時には, 新しい SQL Server インスタンスが起動する
-
-### Business Critical / Premium
-- **Always On 可用性グループ**と同じような方法で可用性を保証
-  - プライマリデータベースとセカンダリデータベースのグループを使用する
-- データファイルとログファイルはローカル VM の SSD にある
-- プライマリで障害発生時には, グループ内のレプリカにフェールオーバーする
-
-### Hyperscale
-- SQL Database でのみ使用できる
+## 別リージョンへのレプリケーション
+- 自動フェールオーバーグループ
+  - 別リージョンにデータベースを複製するので追加コストがかかる
+   - Premium / Business Critical のゾーン冗長構成は追加コストがかからない
+- アクティブ geo レプリケーション
+  - SQL Managed Instance ではサポートされない
 
 ## データ暗号化
 ### 保存データ
