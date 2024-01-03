@@ -1,47 +1,13 @@
-### Event Hubs と Event Grid
-#### Event Hubs
-- データの高スループットな処理とストリームに特化
-- データをプルモデルで使用可能にする
-  - Event Hubs はイベントを受信するとストリームに追加する
-  - サブスクライバーがデータをプルする
-
-#### Event Grid
-- イベント駆動アプリケーションに向く
-- 取り込まれたデータをサブスクライバーにプッシュする
-
-
-### Synthetic Transaction
-- 複数のコンテナでホストされているアプリに対して, コンポーネント間のトラフィックを監視するには "synthetic transaction monitoring" を使用する
-  - Application Insight でサポートされている
-
-
+# Entra
+## Entra ID
 ### ユーザー管理に必要なロール
 - アカウント作成: **User Administrator**
 - パスワードリセット: **Password Administrator** または **Helpdesk Administrator**
   - Helpdesk Administrator は以下の権限を有する
     - パスワードをリセットする
     - ユーザーを強制的にサインアウトさせる
-    - サービス リクエストを管理する
+    - サービスリクエストを管理する
     - サービス正常性を監視する
-
-
-### Network watcher
-- Traffic Analytics はメトリクスを可視化するサービス
-- 特定のトラフィックが到達できるかどうかを検証するには **IP フロー検証**を使う
-
-
-### Azure Policy の割り当て範囲
-- 管理グループ, サブスクリプション, リソースグループ単位で割り当て可能
-- **リソースごとに割り当てることはできない**
-
-
-### アクティビティログ
-- 最大90日間保存される
-
-
-### Azure Synapse Link for SQL
-- Azure SQL Database/Server のオペレーショナルデータに対するリアルタイム分析が可能
-
 
 ## Microsoft ID プラットフォーム
 - 認証(Authentication: *AuthN*)は**身元を証明すること**, 認可(Authorization: *AuthZ*)は**権限を付与すること**
@@ -56,8 +22,6 @@
 - RBAC で権限の付与が可能
 - 外部ユーザーが既存の資格情報を使用できる
 
-#### エンタイトルメント管理
-- B2B で外部ユーザーを招待するにはメールアドレスを知っている必要があるが, エンタイトルメント管理で自動化できる
 
 ### アプリケーションの委任アクセス
 - アプリケーションがメール, 予定表などの(サインインが必要な)データソースにアクセスするためには**委任**が必要
@@ -81,11 +45,12 @@
 - 具体的なサービス例:
   - **エンタイトルメント管理**
     - 内部および**外部**のユーザーのアクセスを効率的に管理
+    - B2B で外部ユーザーを招待するにはメールアドレスを知っている必要があるが, エンタイトルメント管理で自動化できる
   - **プロビジョニング**
     - 複数のシステム間でデジタル ID の一貫性を確保するプロセス
     - 以下の3つに大別される:
       - 人事主導のプロビジョニング
-        - 人事システム内の情報に基づいてオブジェクトを作成する(Cloud HR -> Entra ID)
+        - 人事システム内の情報に基づいてオブジェクトを作成する(Cloud HR から Entra ID)
       - **アプリのプロビジョニング**
         - アプリケーションのユーザーの ID とロールを自動作成すること
         - Entra から SaaS アプリケーション (Dropbox, Salesforce, ServiceNow, ...) へのプロビジョニング
@@ -107,9 +72,15 @@
   - ID ライフサイクル管理
 
 
-## ポリシー
+# ガバナンス
+## Policy
+### Azure Policy の割り当て範囲
+- 管理グループ, サブスクリプション, リソースグループ単位で割り当て可能
+- **リソースごとに割り当てることはできない**
+
 ### コンプライアンスデータの取得
 - アクティビティログ(Log Analytics の `AzureActivity`)からアラートの作成などが可能
+  - 最大90日間保存される
 
 #### オンデマンド
 - Azure CLI, Azure PowerShell, REST API または GitHub Action for Azure Policy Compliance Scan で開始できる
@@ -117,34 +88,26 @@
   - PowerShell: `Start-AzPolicyComplianceScan`
 
 
-## ストレージ
-### ユーザー委任 SAS
-- Entra ID でセキュリティ保護された SAS のこと
-- ベストプラクティスは Entra ID を使用した認証だが, SAS が必要な場合はユーザー委任 SAS を使う
-- **保存されたアクセスポリシーはユーザー委任 SAS ではサポートされない**
-
-### Storage の暗号化
-- BLOB とキューは, クライアント側の暗号化がサポートされる
-  - Storage にアップロードする前に(アプリケーション内部で)暗号化
-  - .NET, Java, Python でサポートされる
-  - Key Vault を使用
-- クライアントライブラリで脆弱性が検出されたため, サービス側の暗号化が推奨される
-
-
-## Azure Monitor
-### 仮想マシンからイベントとパフォーマンスカウンターを取得する
+# Monitor
+## 仮想マシンからイベントとパフォーマンスカウンターを取得する
 - データの収集には収集ルールの作成が必要
   - リソースの追加
     - Azure Monitor エージェントがインストールされていないリソースにはインストールする
     - プライベートリンクも使用できる
   - **データ収集エンドポイント**を有効にする
 
-### Log Analytics のコミットメントレベル
+## Log Analytics のコミットメントレベル
 - あらかじめ使用するデータ量を購入しておくと, 超過した分もその料金で課金される
 - ワークスペースが 200 GB/日のコミットメントレベルにあり, 1日に 300 GB を取り込む場合, 200 GB/日コミットメント レベルの 1.5 ユニットとして課金される
 - [コミットメントレベル](https://learn.microsoft.com/ja-jp/azure/azure-monitor/logs/cost-logs#commitment-tiers)
 
 
+## Synthetic Transaction
+- 複数のコンテナでホストされているアプリに対して, コンポーネント間のトラフィックを監視するには "synthetic transaction monitoring" を使用する
+  - Application Insight でサポートされている
+
+
+# セキュリティ
 ## Key Vault
 ### キーとシークレットの違い
 - キー: セキュリティに使用する情報を格納する(暗号化キー)
@@ -152,13 +115,3 @@
 
 ### App Service と Key Vault の連携
 - アプリ設定や接続文字列の値として Key Vault のシークレットを使用できる
-
-
-## API Management
-- OAuth 2.0 が推奨
-
-### OAuth 2.0 と Entra ID による認可のワークフロー
-- [承認ワークフロー](https://learn.microsoft.com/ja-jp/azure/api-management/api-management-howto-protect-backend-with-aad#authorization-workflow)
-- ユーザーまたはアプリケーションは, バックエンドアプリへのアクセス権を付与するアクセス許可を持つトークンを Entra ID から取得する
-- API Management への API 要求の Authorization ヘッダーにトークンが追加される
-- API Management で `validate-jwt` ポリシーを使用してトークンが検証される
