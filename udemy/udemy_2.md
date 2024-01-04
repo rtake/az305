@@ -6,6 +6,7 @@
   - VM 内の SQL Server
   - Database for MySQL
   - Database for PostgreSQL
+- **Synapse Analytics ではサポートされない**
 - [オンライン トランザクション処理 (OLTP)](https://learn.microsoft.com/ja-jp/azure/architecture/data-guide/relational-data/online-transaction-processing#oltp-in-azure)
 
 

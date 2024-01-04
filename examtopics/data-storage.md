@@ -43,6 +43,7 @@
 - Entra ID でセキュリティ保護された SAS のこと
 - ベストプラクティスは Entra ID を使用した認証だが, SAS が必要な場合はユーザー委任 SAS を使う
 - **保存されたアクセスポリシーはユーザー委任 SAS ではサポートされない**
+- **BLOB でのみサポートされる**
 
 ## Storage の暗号化
 - BLOB とキューは, クライアント側の暗号化がサポートされる
@@ -69,7 +70,9 @@
 ## 分散トランザクション(エラスティックデータトランザクション)
 - 複数のデータベースにまたがるトランザクションを実行する機能
 - Azure SQL Database と Azure SQL Managed Instance でサポートされる
-- .NET または Transact-SQL で開発できる
+- .NET または Transact-SQL(T-SQL) で開発できる
+  - **T-SQL はサーバーサイドの処理**
+  - **Azure SQL Database では T-SQL はサポートされていない**
 
 ## ゾーン冗長
 - SQL Database の全モデル(仮想コア)で使用可能
@@ -78,11 +81,10 @@
 - SQL Databse の方が安価に実現可能
 
 
-# MySQL
-- 自動スケールは Basic 以外で利用可能
-- Geo 冗長バックアップがサポートされる
-- ゾーン冗長高可用性を設定可能
-  - 高可用性はバースト可能なコンピューティングレベルではサポートされない
+# Database for MySQL - フレキシブルサーバー
+- バースト可能, General Purpose, Business Critical の 3レベルが提供される
+- ゾーン冗長高可用性を設定可能(バースト可能以上)
+- [Azure Database for MySQL - フレキシブル サーバーのサービス レベル](https://learn.microsoft.com/ja-jp/azure/mysql/flexible-server/concepts-service-tiers-storage#service-tiers-size-and-server-types)
 
 
 # Cosmos DB
@@ -113,15 +115,18 @@
   - サーバーレス SQL プール 
   - 専用 SQL プール
     - 分散テーブル構築が可能
+    - **計画されたインジェストなどはこちらを使用するのが良い**
   - サーバーレス Apache Spark プール
-    - Delta Lake の操作が可能
+    - Delta Lake の更新をサポートしているのは **Apach Spark プール**のみ
       - Delta Lake: オープンソースストレージレイヤー
 
 ## Azure Synapse Link for SQL
-- Azure SQL Database/Server のオペレーショナルデータに対するリアルタイム分析が可能
+- Azure SQL Database/Server や Cosmos DB のオペレーショナルデータに対するリアルタイム分析が可能
 
 
 # Data Explorer
+- **水平スケーリングをサポート**
+  - ペタバイト級のデータの格納も可能
 - KQL で操作可能
 
 

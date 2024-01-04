@@ -24,6 +24,7 @@
     - 最小ストレージ存在期間は 30 日
   - アーカイブ
     - 最小ストレージ存在期間は 180 日
+    - **リハイドレートに要する時間は 15時間**
 - **不変ストレージ**がサポートされる
 
 ### Files
@@ -56,13 +57,27 @@
 # リレーショナルデータベース
 ## SQL Database
 ### 価格オプション
-- 仮想コアでは, 予約割引を受けられる
-- DTU は事前構成済み
-- サーバーレスは従量課金
+- サービス階層
+  - 仮想コアベース
+    - General Purpose
+    - Business Critical
+    - Hyperscale
+  - DTU: 事前構成済
+    - Basic
+    - Standard
+    - Premium
+  - 仮想コアでは, 予約割引を受けられる
+- コンピューティングレベル
+  - プロビジョニング済
+  - サーバーレス: 従量課金
+- デプロイモデル
+  - 単一データベース
+  - エラスティックプール
+- [Azure SQL Database とは](https://learn.microsoft.com/ja-jp/azure/azure-sql/database/sql-database-paas-overview?view=azuresql#compute-tiers)
 
 ### 可用性
 - ローカル冗長可用性は**全てのサービスレベルでサポートされる**
-- ゾーン冗長可用性は**Basic(DTU), Standard(DTU) ではサポート外**
+- ゾーン冗長可用性は **Basic(DTU), Standard(DTU) ではサポート外**
 - [Azure SQL Database の高可用性](https://learn.microsoft.com/ja-jp/azure/azure-sql/database/high-availability-sla?view=azuresql&tabs=azure-powershell#zone-redundant-availability)
 
 #### ローカル冗長
@@ -103,11 +118,15 @@
 - [ゾーン冗長 Hyperscale データベースを作成する](https://learn.microsoft.com/ja-jp/azure/azure-sql/database/hyperscale-create-zone-redundant-database?view=azuresql&tabs=azure-powershell)
 
 ## SQL Managed Instance
-- 共通言語ランタイム(CLR), SQL Server エージェントなどをサポート
-  - SQL Server エージェント: ジョブをスケーリングできる
 - アプリケーションの再設計無しでリフトアンドシフト移行が可能
-- 仮想コアモードを使用, 最大 CPU コアと最大ストレージを定義できる(**動的スケーリング**)
-- General Purpose と Businnes Critical が提供される
+  - 共通言語ランタイム(CLR), SQL Server エージェントなどをサポート
+    - SQL Server エージェント: ジョブをスケーリングできる
+- **仮想コアモードを使用**
+  - 最大 CPU コアと最大ストレージを定義できる(**動的スケーリング**)
+
+### サービスレベル
+- General Purpose
+- Businnes Critical
 
 ### 可用性
 - ローカル冗長可用性はサポートされている(アーキテクチャは SQL Database と同じ)
@@ -182,6 +201,9 @@
 
 
 # データ統合
+## Data Factory
+- ジョブのスケジューリングが可能
+
 ## Data Lake
 - 複数のソースからリアルタイムデータを直接取り込むことができる
 - Geo 冗長は手動で構成する必要がある
@@ -189,10 +211,13 @@
 ## Databricks
 - ビッグデータ処理と機械学習を単一のプラットフォームで行うことができる
 - Apache Spark に基づいている
+- **行フィルターと列マスクがサポート**
+  - [行フィルターと列マスクを使用して機密性の高いテーブル データをフィルター処理する](https://learn.microsoft.com/ja-jp/azure/databricks/data-governance/unity-catalog/row-and-column-filters)
 
 ## Synapse Analytics
 - サーバーレスデータや大規模データに対してクエリを実行できる
 - 超並列処理(MPP)アーキテクチャ
+- **最大 128個のクエリを実行可能**
 
 ### コンポーネント
 - Synapse SQL プール

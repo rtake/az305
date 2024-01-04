@@ -24,7 +24,7 @@
 - プライマリノードは常にセカンダリノードに変更をプッシュするため, フェールオーバー先のセカンダリノードは常に完全な状態になっている
 
 #### 透過的なデータ暗号化に必要なキー
-- RSA または RSA HSM
+- **RSA または RSA HSM**
 - キー長は 2048 または 3072 バイト
 
 ### SQL Managed Instance
@@ -63,6 +63,8 @@
 ## Azure Time Series Insights
 - 時系列データ向けフルマネージドサービス
 - > IoT Hubまたは、Event Hubからストリーミングデータを受け取り、ほぼリアルタイムでデータを処理、保存、クエリ、視覚化することができます。
+- MQTT プロトコルを使用
+  - 8883 ポートを使用
 
 ## Azure Data Factory
 - データ連携ツール
@@ -114,7 +116,8 @@
 
 ## Microsoft Defender for Cloud
 ### Just-In-Time VM アクセス (JIT)
-- 一時的に RDP や SSH を許可する
+- 一時的に **RDP** や **SSH** を許可する
+  - **HTTPS はサポートされない(Bastion は HTTPS)**
 
 
 ## 負荷分散

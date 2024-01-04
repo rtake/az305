@@ -150,7 +150,7 @@
   - **イベントハブ**
 
 ## Log Analytics の保有日数
-- デフォルトで30日, 最大で730日に設定可能
+- デフォルトで30日, 最大で 730日(2年) に設定可能
 
 ## オンプレミスアプリケーションと Entra ID の連携
 - 下記の操作を順番に行う
@@ -178,7 +178,14 @@
 - SAML
   - AuthnRequest 要素を Entra ID に送信する
 - パスワードベース
+
+### パスワードベースの SSO
+- 初めてアクセスするときにユーザー名とパスワードを入力する. 最初のサインイン後は Entra ID がユーザー名とパスワードを収集/保存し, 必要に応じてアプリケーションに提供する
+- **Application Proxy が設定されている場合のみ使用可能**
+  - [Microsoft Entra ID でのシングル サインオンとは](https://learn.microsoft.com/ja-jp/entra/identity/enterprise-apps/what-is-single-sign-on)
+- ID > アプリケーション > エンタープライズアプリケーション から設定する
   - サインインページの URL を入力すると, HTML を解析してフィールドが自動検出される
+  - [パスワードベースのシングル サインオンをアプリケーションに追加する](https://learn.microsoft.com/ja-jp/entra/identity/enterprise-apps/configure-password-single-sign-on-non-gallery-applications)
 
 ## Key Vault
 - Key Vault のデータはペアになっているリージョンにレプリケーション(セカンダリリージョンにルーティング)される

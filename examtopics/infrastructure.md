@@ -4,10 +4,11 @@
 - Entra ID で API を保護するには**アプリ登録**が必要
 
 ### OAuth 2.0 と Entra ID による認可のワークフロー
+- ユーザーまたはアプリケーションは, バックエンドアプリへのアクセス権を付与するアクセス許可を持つトークンを Entra ID から取得する
+  - **つまり Entra が認可する**といえる
+- API Management への API 要求の Authorization ヘッダーにトークンが追加される
+- API Management で `validate-jwt` ポリシーを使用してトークンが検証される
 - [承認ワークフロー](https://learn.microsoft.com/ja-jp/azure/api-management/api-management-howto-protect-backend-with-aad#authorization-workflow)
-  - ユーザーまたはアプリケーションは, バックエンドアプリへのアクセス権を付与するアクセス許可を持つトークンを Entra ID から取得する
-  - API Management への API 要求の Authorization ヘッダーにトークンが追加される
-  - API Management で `validate-jwt` ポリシーを使用してトークンが検証される
 
 
 # メッセージング
