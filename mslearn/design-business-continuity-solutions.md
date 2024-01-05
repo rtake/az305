@@ -13,9 +13,8 @@
 
 ## Site Recovery
 - 異なる**リージョン**に VM をレプリケートする
-- RTO は満たせるが, RPO は満たせない
-  - どこまでバックアップできているかわからないため
-  - RTO は 2 時間と発表されている
+- RTO は 15分未満, RPO は 1時間
+  - [https://learn.microsoft.com/ja-jp/azure/site-recovery/site-recovery-sql](https://learn.microsoft.com/ja-jp/azure/site-recovery/site-recovery-sql)
 
 ## アーキテクチャの例
 ### 単一リージョンの高可用性の例
@@ -42,6 +41,7 @@
 - 読み取りレプリカをサポート
   - 処理の負荷をオフロードできる
   - 読み取りレプリカは別リージョンに存在するので可用性も向上できる
+- 自動スケールは Basic 以外で利用可能
 
 ## Database for PostgreSQL
 - MySQL と同様

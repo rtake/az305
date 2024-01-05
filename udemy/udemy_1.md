@@ -23,9 +23,10 @@
 #### フェールオーバー
 - プライマリノードは常にセカンダリノードに変更をプッシュするため, フェールオーバー先のセカンダリノードは常に完全な状態になっている
 
-#### 透過的なデータ暗号化に必要なキー
-- **RSA または RSA HSM**
-- キー長は 2048 または 3072 バイト
+#### カスタマーマネージド TDE に必要なキー
+- TDE: 透過的なデータ暗号化
+- TDE の保護に使えるのは **RSA または RSA HSM**, キー長は 2048 または 3072 バイト
+- [カスタマー マネージド キーを使用した Azure SQL Transparent Data Encryption - TDE 保護機能を構成するための要件](https://learn.microsoft.com/ja-jp/azure/azure-sql/database/transparent-data-encryption-byok-overview?view=azuresql#requirements-for-configuring-tde-protector)
 
 ### SQL Managed Instance
 - 共通言語ランタイム(CLR: Common Language Runtime)がサポートされている
