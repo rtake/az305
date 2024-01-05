@@ -47,6 +47,10 @@
 ## Load Balancer
 ### Gateway Load Balancer
 - NVA を使用する高可用性シナリオに対応する Load Balancer の SKU
+- ゲートウェイロードバランサーに加えて, Standard ロードバランサーをデプロイしていることが必要
+- **Standard ロードバランサーのフロントエンドをゲートウェイロードバランサーに関連付ける必要がある**
+  - これによって, 処理されていないトラフィックを NVA に振り分けることができる
+- [チュートリアル: Azure portal を使用してゲートウェイ ロード バランサーを作成する](https://learn.microsoft.com/ja-jp/azure/load-balancer/tutorial-gateway-portal#add-network-virtual-appliances-to-the-gateway-load-balancer-backend-pool)
 
 ## Network watcher
 - Traffic Analytics はメトリクスを可視化するサービス
@@ -55,6 +59,6 @@
 
 # Kubernetes Service
 ## マルチリージョンクラスター
-- [マルチリージョン クラスターの AKS ベースライン](https://learn.microsoft.com/ja-jp/azure/architecture/reference-architectures/containers/aks-multi-region/aks-multi-cluster)
-  - 複数のリージョンにクラスターをデプロイし, Front Door で負荷分散する
-  - 裏側に Application Gateway を立てる
+- **複数のリージョンにクラスターをデプロイし, Front Door で負荷分散する**
+- **裏側に Application Gateway を立てる**
+  - [マルチリージョン クラスターの AKS ベースライン](https://learn.microsoft.com/ja-jp/azure/architecture/reference-architectures/containers/aks-multi-region/aks-multi-cluster)

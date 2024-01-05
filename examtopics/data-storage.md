@@ -27,9 +27,6 @@
 ### 不変ストレージ
 - **汎用 v2 と Premium ブロック BLOB** でサポート
 
-### 変更フィード
-- *コピーを検知できる*[要検証]
-
 ## Table Storage
 - 毎秒 20,000 トランザクションまでサポート
   - より高速な処理が必要な場合は Cosmos DB などを使用する
@@ -51,6 +48,17 @@
   - .NET, Java, Python でサポートされる
   - Key Vault を使用
 - **サービス側の暗号化が推奨される**(クライアントライブラリで脆弱性が検出されたため)
+
+## フェールオーバーとフェールバック
+- フェールバックの手順は以下:
+  - 事前に GRS を構成しておく
+  - フェールオーバー実施
+    - セカンダリリージョンが新しいプライマリになる
+    - 元のプライマリのデータが削除される
+    - **ストレージアカウントが LRS に変換される(geo 冗長が失われる)**
+      - **フェールバックのためには再度 geo 冗長を構成しなおす必要がある**
+  - フェールバックの実施
+- [ストレージ アカウントのカスタマー マネージド フェールオーバーのしくみ](https://learn.microsoft.com/ja-jp/azure/storage/common/storage-failover-customer-managed-unplanned?tabs=grs-ra-grs#the-failover-and-failback-process)
 
 
 # SQL
@@ -84,7 +92,9 @@
 # Database for MySQL - フレキシブルサーバー
 - バースト可能, General Purpose, Business Critical の 3レベルが提供される
 - ゾーン冗長高可用性を設定可能(バースト可能以上)
-- [Azure Database for MySQL - フレキシブル サーバーのサービス レベル](https://learn.microsoft.com/ja-jp/azure/mysql/flexible-server/concepts-service-tiers-storage#service-tiers-size-and-server-types)
+  - [Azure Database for MySQL - フレキシブル サーバーのサービス レベル](https://learn.microsoft.com/ja-jp/azure/mysql/flexible-server/concepts-service-tiers-storage#service-tiers-size-and-server-types)
+- *リードレプリカを作成することでフェールオーバー時のダウンタイムを最小化できる[要出典]*
+  - 手動で構成することはできない?
 
 
 # Cosmos DB

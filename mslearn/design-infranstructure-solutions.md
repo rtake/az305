@@ -24,6 +24,8 @@
 
 ## Container Instances
 - コンテナ化可能な場合は App Service ではなく Container Instances を使う
+- **スケーリングはサポートされない**
+  - スケーリングが必要な場合は Contaier Apps を使用する
 
 ### コンテナ―グループ
 - 同じコンピュータでホストされるコンテナーの集合
@@ -33,6 +35,12 @@
 - 分離の度合いは弱い
   - VM では他の VM から完全に分離される
 - Docker 個々のコンテナーをデプロイする
+
+## Container Apps
+- **インスタンスを追加し自動的にスケールする**
+  - HTTP 要求数, TCP 接続数, その他カスタムイベントなどによってトリガーされる
+  - [Azure Container Apps でスケーリング ルールを設定する](https://learn.microsoft.com/ja-jp/azure/container-apps/scale-app?pivots=azure-cli)
+- *ゾーン冗長をサポートする[要検証]*
 
 ## Funcstions
 - デプロイする際にストレージアカウントが必要
